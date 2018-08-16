@@ -1,30 +1,24 @@
 interface Cycle {
     numberOfWheels: number;
-    hasFender: boolean;
-    hasHandlebars: boolean;
+}
+
+enum BicycleType {
+    BICYCLE,
+    UNICYCLE
 }
 
 class Bicycle implements Cycle {
     numberOfWheels: number;
-    hasFender: boolean;
-    hasHandlebars: boolean;
-
     constructor() {
         this.numberOfWheels = 2;
-        this.hasFender = true;
-        this.hasHandlebars = true;
     }
+}
 
-    getNumberOfWheels() {
-        return this.numberOfWheels;
-    }
+class Unicycle implements Cycle {
+    numberOfWheels: number;
 
-    getHasFender() {
-        return this.hasFender;
-    }
-
-    getHasHandleBars() {
-        return this.hasHandlebars;
+    constructor() {
+        this.numberOfWheels = 1;
     }
 }
 
@@ -32,25 +26,37 @@ class Bicycle implements Cycle {
 
 const bicycleWithoutFactory = new Bicycle();
 
-bicycleWithoutFactory.getNumberOfWheels();
-bicycleWithoutFactory.getHasFender();
-bicycleWithoutFactory.getHasHandleBars();
+if (bicycleWithoutFactory.numberOfWheels === 2) {
+    console.log('We have a bicycle!');
+}
 
 // But with simple factory you create a class that makes the cycle for you
 
-class BicycleFactory {
-    public static makeBicycle(): Bicycle {
-        return new Bicycle();
+class CycleFactory {
+    public static makeCycle(type: BicycleType): Cycle {
+        if (type === BicycleType.UNICYCLE) {
+            return new Unicycle();
+        } else if (type === BicycleType.BICYCLE) {
+            return new Bicycle();
+        } else {
+            // Default option
+            return new Bicycle();
+        }
     }
 }
 
 // Now we can create bicycles and unicycles through the factory without calling new on the bicycle or unicycle classes
 
-const bicycleWithFactory = BicycleFactory.makeBicycle();
+const bicycleWithFactory = CycleFactory.makeCycle(BicycleType.BICYCLE);
+const unicycleWithFactory = CycleFactory.makeCycle(BicycleType.UNICYCLE);
 
-bicycleWithFactory.getNumberOfWheels();
-bicycleWithFactory.getHasFender();
-bicycleWithFactory.getHasHandleBars();
+if (bicycleWithFactory.numberOfWheels === 2) {
+    console.log('We have a bicycle!');
+}
+
+if (unicycleWithFactory.numberOfWheels === 1) {
+    console.log('We have a unicycle');
+}
 
 // This is primarily useful when the instantiation logic is complex and you want to hide that complexity in the factory
 // Consider using this in your code when you have lots of setup logic duplicated throughout your code
