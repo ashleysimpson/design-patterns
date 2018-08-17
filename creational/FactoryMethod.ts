@@ -38,7 +38,7 @@ class Car extends Vehicle {
 abstract class VehicleFactory {
     public abstract makeVehicle(): Vehicle;
 
-    public driveOff() {
+    someMakingVehicleFunction() {
         const vehicle = this.makeVehicle();
         vehicle.drive();
     }
@@ -48,22 +48,38 @@ abstract class VehicleFactory {
 
 class MotorcycleFactory extends VehicleFactory {
     public makeVehicle(): Vehicle {
+        // Complex motorcycle building logic
+
         return new Motorcycle();
     }
 }
 
 class CarFactory extends VehicleFactory {
     public makeVehicle(): Vehicle {
+        // Complex car building logic
+
         return new Car();
     }
 }
 
 // The different implementations use the same underlying functionality but have different ways to build vehicles
 
-const motorcycleFactory = new MotorcycleFactory();
-const carFactory = new CarFactory();
+// We can then select the factory build at runtime or through some parameters
 
-motorcycleFactory.makeVehicle();
-carFactory.makeVehicle();
-motorcycleFactory.driveOff();
-carFactory.driveOff();
+let vehicleRequired = 'Motorcycle';
+let factory: VehicleFactory;
+
+
+if (vehicleRequired === 'Motorcycle') {
+    factory = new MotorcycleFactory();
+} else {
+    factory = new CarFactory();
+}
+
+const vehicle = factory.makeVehicle();
+vehicle.drive();
+
+factory.someMakingVehicleFunction();
+
+// This is useful when you have want to make objects in different ways and want to delegate this decision to a child class
+// It is also useful when you are not sure what type of object you require until runtime
